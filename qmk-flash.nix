@@ -34,6 +34,9 @@ pkgs.writeShellScriptBin "qmk-flash" ''
   echo "" >> "$QMK_HOME/keyboards/$keyboard/rules.mk"
   echo "$json" | ${jq} -r .extraRules >> "$QMK_HOME/keyboards/$keyboard/rules.mk"
 
+  echo "" >> "$QMK_HOME/keyboards/$keyboard/config.h"
+  echo "$json" | ${jq} -r .extraHeader >> "$QMK_HOME/keyboards/$keyboard/config.h"
+
   ${qmk} json2c "$jsonfile"
   ${qmk} flash --clean --keyboard "$keyboard" --keymap "$keymap" "$jsonfile"
 ''
