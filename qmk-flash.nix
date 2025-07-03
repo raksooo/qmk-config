@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, qmk-patched, ... }:
 
 let
   nix = pkgs.lib.getExe pkgs.nix;
-  qmk = pkgs.lib.getExe pkgs.qmk;
+  qmk = pkgs.lib.getExe qmk-patched;
   jq = pkgs.lib.getExe pkgs.jq;
 in
 pkgs.writeShellScriptBin "qmk-flash" ''

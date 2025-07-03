@@ -35,7 +35,12 @@
       );
 
       packages = forAllSystems (
-        _: pkgs: { qmk-flash = import ./qmk-flash.nix { inherit pkgs; }; }
+        _: pkgs: rec {
+          qmk-patched = pkgs.qmk.overrideAttrs (oldAttrs: {
+            propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ pkgs.python3.pkgs.appdirs ];
+          });
+          qmk-flash = import ./qmk-flash.nix { inherit pkgs qmk-patched; };
+        }
       );
     };
 }
