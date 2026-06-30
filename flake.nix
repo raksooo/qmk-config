@@ -15,15 +15,17 @@
     {
       lib = import ./lib.nix inputs;
 
-      nixosModules.default =
-        { pkgs, ... }:
-        {
-          nixpkgs.overlays = self.overlays;
-          hardware.keyboard.qmk.enable = true;
-          environment.systemPackages = [ pkgs.qmk-flash ];
-        };
+      nixosModules.default = { pkgs, ... }: {
+        nixpkgs.overlays = self.overlays;
+        hardware.keyboard.qmk.enable = true;
+        environment.systemPackages = [ pkgs.qmk-flash ];
+      };
 
-      overlays = [ (final: prev: { qmk-flash = self.packages.${final.system}.qmk-flash; }) ];
+      overlays = [
+        (final: prev: {
+          qmk-flash = self.packages.${final.stdenv.hostPlatform.system}.qmk-flash;
+        })
+      ];
 
       apps = forAllSystems (
         system: pkgs: {
